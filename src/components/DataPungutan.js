@@ -14,6 +14,10 @@ const DataPungutanForm = () => {
     flagKontainer: 'Cargo Curah',
     bruto: 1000.98,
     netto: 1000.98,
+    namaPerusahaan: '',
+    alamat: '',
+    npwp: '',
+    status: '',
   });
 
   const [isLoading, setIsLoading] = useState(true);
@@ -21,28 +25,22 @@ const DataPungutanForm = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const apiURL = `http://10.8.3.199:1880/test/v2/dataPungutan?id_aju=04eb6a72-bb63-5aed-5e92-f58a3bfd5da2`;
+      const apiURL = `https://api-hub.ilcs.co.id/test/v2/dataEntitas?id_aju=04eb6a72-bb63-5aed-5e92-f58a3bfd5da2`;
 
       try {
         const response = await fetch(apiURL);
         const result = await response.json();
 
         if (result.status) {
-          const apiData = result.data;
+          const apiData = result.data.pengusaha;
 
+          // Set the form data with the fetched API data
           setFormData({
-            nilai: apiData.nilai || 119600,
-            biayaTambahan: apiData.biayaTambahan || 0,
-            biayaPengurangan: apiData.biayaPengurangan || 2850,
-            voluntaryDeclaration: apiData.voluntaryDeclaration || 0,
-            asuransi: apiData.asuransi || 637.14,
-            freight: apiData.freight || 4978,
-            kurs: apiData.kurs || 16232,
-            cif: apiData.cif || 122365.14,
-            cifRp: apiData.cifRp || 1986230952.48,
-            flagKontainer: apiData.flagKontainer || 'Cargo Curah',
-            bruto: apiData.bruto || 1000.98,
-            netto: apiData.netto || 1000.98,
+            ...formData,
+            namaPerusahaan: apiData.nama_identitas || '',
+            alamat: apiData.alamat_identitas || '',
+            npwp: apiData.nomor_identitas || '',
+            status: apiData.status || '',
           });
 
           setIsLoading(false);
@@ -78,7 +76,6 @@ const DataPungutanForm = () => {
   return (
     <div className="max-w-5xl mx-auto p-4">
       <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
         <div className="flex flex-col">
           <label className="text-sm font-medium">
             Incoterms <span className="text-red-500">*</span>
@@ -87,7 +84,6 @@ const DataPungutanForm = () => {
             <option value="Free on Board">Free on Board</option>
           </select>
         </div>
-
 
         <div className="flex flex-col">
           <label className="text-sm font-medium">
@@ -134,9 +130,7 @@ const DataPungutanForm = () => {
         </div>
 
         <div className="flex flex-col">
-          <label className="text-sm font-medium">
-            Voluntary Declaration
-          </label>
+          <label className="text-sm font-medium">Voluntary Declaration</label>
           <input
             type="number"
             name="voluntaryDeclaration"
@@ -235,6 +229,51 @@ const DataPungutanForm = () => {
           >
             <option value="Cargo Curah">Cargo Curah</option>
           </select>
+        </div>
+
+        {/* Additional Fields from API */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium">Nama Perusahaan</label>
+          <input
+            type="text"
+            name="namaPerusahaan"
+            value={formData.namaPerusahaan}
+            className="border rounded px-3 py-2"
+            readOnly
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <label className="text-sm font-medium">Alamat</label>
+          <input
+            type="text"
+            name="alamat"
+            value={formData.alamat}
+            className="border rounded px-3 py-2"
+            readOnly
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <label className="text-sm font-medium">NPWP</label>
+          <input
+            type="text"
+            name="npwp"
+            value={formData.npwp}
+            className="border rounded px-3 py-2"
+            readOnly
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <label className="text-sm font-medium">Status</label>
+          <input
+            type="text"
+            name="status"
+            value={formData.status}
+            className="border rounded px-3 py-2"
+            readOnly
+          />
         </div>
 
         <div className="flex col-span-2 justify-center mt-4">

@@ -24,29 +24,29 @@ const BusinessForm = () => {
   // Fetch data from API
   useEffect(() => {
     const fetchData = async () => {
-      const apiURL = `http://10.8.3.199:1880/test/v2/dataEntitas?id_aju=04eb6a72-bb63-5aed-5e92-f58a3bfd5da2`;
+      const apiURL = `https://api-hub.ilcs.co.id/test/v2/dataEntitas?id_aju=04eb6a72-bb63-5aed-5e92-f58a3bfd5da2`;
 
       try {
         const response = await fetch(apiURL);
         const result = await response.json();
         if (result.status) {
-          const apiData = result.data;
+          const apiData = result.data.pengusaha; // Mengambil data dari 'pengusaha'
 
           setFormData({
-            jenisPemberitahuan: 'PENGUSAHA',
-            NIB: apiData.NIB || '',
-            tanpaNIB: apiData.tanpaNIB || false,
-            noIdentitas: apiData.noIdentitas || '',
-            jenisIdentitas: apiData.jenisIdentitas || '',
-            namaPerusahaan: apiData.namaPerusahaan || '',
-            provinsi: apiData.provinsi || '',
-            kotaKabupaten: apiData.kotaKabupaten || '',
+            jenisPemberitahuan: result.data.ur_entitas || 'PENGUSAHA',
+            NIB: apiData.nib || '',
+            tanpaNIB: apiData.nib === '' || false,
+            noIdentitas: apiData.nomor_identitas || '',
+            jenisIdentitas: apiData.ur_jenis_identitas || '',
+            namaPerusahaan: apiData.nama_identitas || '',
+            provinsi: apiData.provinsi_identitas || '',
+            kotaKabupaten: apiData.kota_identitas || '',
             kecamatan: apiData.kecamatan || '',
-            kodePos: apiData.kodePos || '',
-            telephone: apiData.telephone || '',
-            email: apiData.email || '',
+            kodePos: apiData.kode_pos || '',
+            telephone: apiData.tlp_identitas || '',
+            email: apiData.email_identitas || '',
             status: apiData.status || '',
-            rtRw: apiData.rtRw || ''
+            rtRw: apiData.rt_rw || ''
           });
 
           setIsLoading(false);
